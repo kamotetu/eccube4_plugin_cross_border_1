@@ -1,0 +1,69 @@
+<script>
+    $(function(){
+        var elem1 = $('span:contains("会社名")').parent().parent();
+        elem1.eq(0).after($('#shop_master_lang_form_company_name'));
+        var elem2 = $('span:contains("店名")').parent().parent();
+        elem2.eq(0).after($('#shop_master_lang_form_shop_name'));
+        var elem3 = $('span:contains("取り扱い商品説明文")').parent().parent().parent();
+        elem3.eq(0).after($('#shop_master_lang_form_good_traded'));
+        var elem4 = $('span:contains("店舗からのメッセージ")').parent().parent().parent();
+        elem4.eq(0).after($('#shop_master_lang_form_message'));
+    });
+</script>
+{% if(eccube_config.locale is not same as(getCurrentLocale()) ) %}
+{#    言語別会社名#}
+    <div class="row" id="shop_master_lang_form_company_name">
+        <div class="col-3">
+            <div class="d-inline-block" data-tooltip="true" data-placement="top" title="{{ 'tooltip.setting.shop.shop.company_name.lang_message'|trans }}">
+                <span>{{ 'admin.setting.shop.shop.company_name.lang_title'|trans }}</span>
+                <i class="fa fa-question-circle fa-lg ml-1"></i>
+            </div>
+        </div>
+        <div class="col mb-2">
+            {{ form_widget(form.shop_master_content1) }}
+            {{ form_errors(form.shop_master_content1) }}
+        </div>
+    </div>
+
+{#    言語別店舗名#}
+    <div class="row" id="shop_master_lang_form_shop_name">
+        <div class="col-3">
+            <div class="d-inline-block" data-tooltip="true" data-placement="top" title="{{ 'tooltip.setting.shop.shop.shop_name.lang_message'|trans }}">
+                <span>{{ 'admin.setting.shop.shop.shop_name.lang_title'|trans }}</span>
+                <i class="fa fa-question-circle fa-lg ml-1"></i>
+            </div>
+        </div>
+        <div class="col mb-2">
+            {{ form_widget(form.shop_master_content2) }}
+            {{ form_errors(form.shop_master_content2) }}
+        </div>
+    </div>
+
+{#    言語別取り扱い商品説明文#}
+    <div class="row" id="shop_master_lang_form_good_traded">
+        <div class="col-3">
+            <div class="d-inline-block" data-tooltip="true" data-placement="top" title="{{ 'tooltip.setting.shop.shop.good_traded.lang_message'|trans }}">
+                <span>{{ 'admin.setting.shop.shop.good_traded.lang_title'|trans }}</span>
+                <i class="fa fa-question-circle fa-lg ml-1"></i>
+            </div>
+        </div>
+        <div class="col mb-2">
+            {{ form_widget(form.shop_master_content3) }}
+            {{ form_errors(form.shop_master_content3) }}
+        </div>
+    </div>
+
+{#    言語別店舗からのメッセージ#}
+    <div class="row" id="shop_master_lang_form_message">
+        <div class="col-3">
+            <div class="d-inline-block" data-tooltip="true" data-placement="top" title="{{ 'tooltip.setting.shop.shop.message.lang_message'|trans }}">
+                <span>{{ 'admin.setting.shop.shop.message.lang_title'|trans }}</span>
+                <i class="fa fa-question-circle fa-lg ml-1"></i>
+            </div>
+        </div>
+        <div class="col mb-2">
+            {{ form_widget(form.shop_master_content4) }}
+            {{ form_errors(form.shop_master_content4) }}
+        </div>
+    </div>
+{% endif %}

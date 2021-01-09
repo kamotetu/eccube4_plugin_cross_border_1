@@ -1,0 +1,31 @@
+<script>
+    $(function(){
+        var elem = $('span:contains("配送業者名")').parent().parent();
+        elem.eq(0).after($('#delivery_edit_lang_form_area'));
+        $('div#ex-delivery-time > div > ul > li > div > div').eq(0).after($('#delivery_edit_delivery_time_lang_form'));
+    });
+</script>
+{% if(eccube_config.locale is not same as(getCurrentLocale()) ) %}
+    <div class="row" id="delivery_edit_lang_form_area">
+        <div class="col-3">
+            <div class="d-inline-block" data-tooltip="true" data-placement="top"
+                 title="{{ 'tooltip.setting.shop.delivery.delivery_name.lang_message'|trans }}">
+                <span>{{ 'admin.setting.shop.delivery.delivery_name.lang_title'|trans }}</span>
+                <i class="fa fa-question-circle fa-lg ml-1"></i>
+            </div>
+        </div>
+        <div class="col mb-2">
+            {{ form_widget(form.delivery_content) }}
+            {{ form_errors(form.delivery_content) }}
+        </div>
+    </div>
+
+    <div class="col-auto d-flex align-items-center" id="delivery_edit_delivery_time_lang_form">
+        <div class="d-inline-block col-6" data-tooltip="true" data-placement="top"
+             title="{{ 'tooltip.setting.shop.delivery.delivery_time.lang_message'|trans }}">
+            <span>{{ 'admin.setting.shop.delivery.delivery_time.lang_title'|trans }}</span>
+            <i class="fa fa-question-circle fa-lg ml-1"></i>
+        </div>
+        <input type="text" id="add-delivery-time-value-lang" class="form-control" style="border-color:#638dff;">
+    </div>
+{% endif %}

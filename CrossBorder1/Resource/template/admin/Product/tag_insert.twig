@@ -1,0 +1,37 @@
+<script>
+    $(function(){
+        $('form > div').eq(0).before($('#product_tag_name_title'));
+        $('form > div').eq(1).after($('#product_tag_lang_new_form_title'));
+        $('#product_tag_lang_new_form_title').after($('#product_tag_lang_new_form_form'));
+        var insert_elem = $('div[id^="product_tag_lang_add_form"]');
+        for(var i = 0;insert_elem.length > i;++i){
+            var insert_elem_id = insert_elem[i].id.replace(/product_tag_lang_add_form(\d+)/g, '$1');
+            var insert_html = $('#product_tag_lang_add_form' + insert_elem_id);
+            $('#tag_' + insert_elem_id + '_name').parent().after(insert_html);
+        }
+    });
+</script>
+
+<div class="col-auto align-self-center" id="product_tag_name_title">
+    <span class="card-title">{{ 'タグ'|trans }}</span>
+</div>
+
+{% if(eccube_config.locale is not same as(getCurrentLocale()) ) %}
+    <div class="col-auto align-self-center" id="product_tag_lang_new_form_title">
+        <span class="card-title">{{ '言語別タグ'|trans }}</span>
+    </div>
+    <div class="col-auto align-items-center" id="product_tag_lang_new_form_form">
+        {{ form_widget(form.product_tag_content) }}
+        {{ form_errors(form.product_tag_content) }}
+    </div>
+{% endif %}
+
+{% for Tag in Tags %}
+    {% if(eccube_config.locale is not same as(getCurrentLocale()) ) %}
+        <div class="col-auto align-items-center" id="product_tag_lang_add_form{{ Tag.id }}">
+            {{ form_widget(forms[Tag.id].product_tag_content) }}
+            {{ form_errors(forms[Tag.id].product_tag_content) }}
+        </div>
+    {% endif %}
+{% endfor %}
+

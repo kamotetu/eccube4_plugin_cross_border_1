@@ -1,0 +1,96 @@
+{% extends '@admin/default_frame.twig' %}
+
+{% set menus = ['store', 'plugin', 'plugin_list'] %}
+
+{% block title %}CrossBorder1{% endblock %}
+{% block sub_title %}プラグイン一覧{% endblock %}
+
+{% block stylesheet %}
+    <style>
+        .text-area {
+            white-space: pre-line;
+        }
+        .img-area{
+            width: 100%;
+            height: auto;
+        }
+        .bb {
+            border-bottom: solid 1px rgba(0, 0, 0, 0.125);
+        }
+        .explanation {
+            color: mediumblue;
+        }
+        .open {
+            color: royalblue;
+        }
+    </style>
+{% endblock stylesheet %}
+
+{% block javascript %}
+<script src="{{ asset('assets/js/vendor/fileupload/vendor/jquery.ui.widget.js', 'admin') }}"></script>
+<script>
+    $(".explanation").on('click', function(){
+        if($(this).hasClass("open")){
+            $(this).removeClass("open");
+        }else{
+            $(this).addClass('open');
+        }
+    });
+</script>
+{% endblock javascript %}
+
+{% block main %}
+    <div class="c-contentsArea__cols">
+        <div class="c-contentsArea__primaryCol">
+            <div class="c-primaryCol">
+                <div class="card rounded border-0 mb-4">
+                    <div class="card-header"><span class="card-title">{{ 'admin.content.cross_border1.guide'|trans }}</span></div>
+                    <div class="card-body">
+                        <div class="row bb">
+                            <div class="col-3"><p>■ プラグイン説明</p></div>
+                            <span class="text-area col mb-2">本プラグインは、ヘッダーに追加された言語選択により、表サイトの表示言語を変更することができるようになります。
+                                また、商品名やカテゴリなど、表サイトに表示される項目も言語ごとに名前を設定できるようになっています。
+                                各画面ごとの詳細については、下記をご覧ください。
+                            </span>
+                        </div>
+                        <div class="row bb">
+                            <div class="col-3"><p>■ 設定画面</p></div>
+                            <span class="text-area col mb-2">
+                                【設定画面】
+                                <img src="" alt="設定画面画像">
+
+                                設定画面では、言語ファイルのアップロード、ダウンロード、また、言語切替用プルダウンのリストの登録や編集を行います。
+
+                                <p class="font-weight-bold bb d-inline-block">言語ファイルダウンロード</p>
+
+                                【設定画面】
+                                <img src="" alt="ダウンロードフォームをピックアップ">
+
+                                赤枠で囲った箇所がダウンロードフォームとなります。
+                                プルダウンのリストはECCUBEインストール時のデフォルトで
+                                「messages.ja.yaml」
+                                「messages.en.yaml」
+                                「validators.ja.yaml」
+                                「validators.en.yaml」
+                                の４つのファイルとなっています。
+                                <span class="explanation" data-toggle="collapse" href="#addComment"
+                                      role="button" aria-expanded="false" aria-controls="addComment"><i class="fa fa-question-circle fa-lg ml-1"></i>messages.〇〇.yaml
+                                </span><div class="collapse bg-ec-formGray" id="addComment" style="width:80%;">常に表示されているテキストをまとめているファイルです。
+                                例えば、左のメニューの「ホーム」と表示されている箇所は、messages.ja.yamlでは「admin.home: ホーム」と記述されており、
+                                    html(twig)ファイル上で「{% set admin_home = '{'~'{'~"'admin.home'|trans"~'}'~'}' %}{{ admin_home }}」と記述することにより、yamlファイルの「ホーム」の部分が表示されているのです。</div><span class="explanation" data-toggle="collapse" href="#addComment"
+                                      role="button" aria-expanded="false" aria-controls="addComment"><i class="fa fa-question-circle fa-lg ml-1"></i>validators.〇〇.yaml
+                                </span><div class="collapse bg-ec-formGray" id="addComment" style="width:80%;">常に表示されているテキストをまとめているファイルです。
+                                例えば、左のメニューの「ホーム」と表示されている箇所は、messages.ja.yamlでは「admin.home: ホーム」と記述されており、
+                                    html(twig)ファイル上で「{% set admin_home = '{'~'{'~"'admin.home'|trans"~'}'~'}' %}{{ admin_home }}」と記述することにより、yamlファイルの「ホーム」の部分が表示されているのです。</div>
+                                <p class="text-danger">※すでに別の言語ファイルをアップロードされている方は追加されたファイルも表示されます。</p>
+                                「messages.〇〇.yaml」ファイルは、常に表示されている言語ファイルとなります。
+                                (例えば、)
+                                こちらから元となるファイルを選択し、「ダウンロード」ボタンをクリックしてダウンロードしてください。
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

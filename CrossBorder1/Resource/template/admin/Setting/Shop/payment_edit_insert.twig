@@ -1,0 +1,21 @@
+<script>
+    $(function(){
+        var elem = $('span:contains("支払方法名")').parent().parent();
+        elem.eq(0).after($('#payment_edit_lang_form_area'));
+    });
+</script>
+{% if(eccube_config.locale is not same as(getCurrentLocale()) ) %}
+
+    <div class="row" id="payment_edit_lang_form_area">
+        <div class="col-3">
+            <div class="d-inline-block" data-tooltip="true" data-placement="top" title="{{ 'tooltip.setting.shop.payment.payment_name.lang_message'|trans }}">
+                <span>{{ 'admin.setting.shop.payment.payment_name.lang_title'|trans }}</span><i class="fa fa-question-circle fa-lg ml-1"></i>
+            </div>
+        </div>
+        <div class="col mb-2">
+            {{ form_widget(form.payment_register_content) }}
+            {{ form_errors(form.payment_register_content) }}
+        </div>
+    </div>
+
+{% endif %}

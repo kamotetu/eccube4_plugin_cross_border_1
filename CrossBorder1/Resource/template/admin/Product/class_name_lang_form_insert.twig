@@ -1,0 +1,52 @@
+<style>
+    .lang_form_class_name_area {
+        display: flex;
+    }
+    #lang_form_new_class_name_area {
+        display: flex;
+        width: 100%;
+    }
+</style>
+
+<script>
+    $(function(){
+        $('form[name="form1"] > div').eq(1).removeClass('col-3 mr-2');
+        $('form[name="form1"] > div').eq(1).addClass('col-2');
+        $('form[name="form1"] > div').eq(3).removeClass('col-3');
+        $('form[name="form1"] > div').eq(3).addClass('col-2');
+        $('form[name="form1"] > div').eq(1).after($('#lang_form_new_class_name_area_title'));
+        $('#lang_form_new_class_name_area_title').after($('#lang_form_new_class_name_area_form'));
+        var insert_elem = $('div[id^="lang_form_class_name_area"]');
+        for(var i = 0;insert_elem.length > i;++i){
+            var insert_elem_id = insert_elem[i].id.replace(/lang_form_class_name_area(\d+)/g, '$1');
+            var insert_html = $('#lang_form_class_name_area' + insert_elem_id);
+            $('#class_name_' + insert_elem_id + '_name').parent().after(insert_html);
+        }
+    });
+</script>
+
+{% for ClassName in ClassNames %}
+    {% set id = ClassName.id %}
+    <div id="lang_form_class_name_area{{ id }}" class="lang_form_class_name_area">
+        {% if(eccube_config.locale is not same as(getCurrentLocale())) %}
+            <div class="col-auto align-self-center"><span>{{ '言語別規格名'|trans }}</span></div>
+            <div class="col-auto align-items-center">
+                {{ form_widget(forms[ClassName.id].class_name_content) }}
+                {{ form_errors(forms[ClassName.id].class_name_content) }}
+            </div>
+        {% endif %}
+    </div>
+{% endfor %}
+
+{% if(eccube_config.locale is not same as(getCurrentLocale())) %}
+    <div id="lang_form_new_class_name_area_title" class="col-auto align-self-center" data-tooltip="true" data-placement="top" title="{{ 'tooltip.product.class_name.lang_message'|trans }}">
+        <span>{{ '言語別規格名'|trans }}</span>
+        <i class="fa fa-question-circle fa-lg ml-1"></i>
+    </div>
+    <div id="lang_form_new_class_name_area_form" class="col-2">
+        {{ form_widget(form.class_name_content) }}
+        {{ form_errors(form.class_name_content) }}
+    </div>
+{% endif %}
+
+

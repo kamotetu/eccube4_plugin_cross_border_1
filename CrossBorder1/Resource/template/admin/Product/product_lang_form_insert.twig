@@ -1,0 +1,99 @@
+<script>
+    $(function(){
+        var elem1 = $('span:contains("商品名")').parent().parent().parent();
+        elem1.eq(0).after($('#product_name_insert_lang_form'));
+        var elem2 = $('span:contains("商品説明(一覧)")').parent().parent().parent().parent();
+        elem2.eq(1).after($('#product_detail_and_detail_list_lang_form'));
+        var elem3 = $('span:contains("フリーエリア")').parent().parent();
+        elem3.eq(1).after($('#product_free_area_lang_form'));
+    });
+</script>
+
+<style>
+    #product_free_area_lang_form {
+        margin-top: 10px;
+    }
+</style>
+{#言語別商品名フォーム#}
+<div id="product_name_insert_lang_form">
+    {% if(eccube_config.locale is not same as(getCurrentLocale()) ) %}
+        <div class="row">
+            <div class="col-3">
+                <div class="d-inline-block" data-tooltip="true" data-placement="top" title="{{ 'tooltip.product.name.lang_message'|trans }}">
+                    <span>言語別商品名</span>
+                    <i class="fa fa-question-circle fa-lg ml-1"></i>
+                </div>
+            </div>
+
+            <div class="col mb-2">
+                {{ form_widget(form.product_content1) }}
+                {{ form_errors(form.product_content1) }}
+            </div>
+        </div>
+    {% endif %}
+</div>
+{#言語別商品名フォーム終わり#}
+{# 言語別商品説明フォーム#}
+<div id="product_detail_and_detail_list_lang_form">
+    {% if(eccube_config.locale is not same as(getCurrentLocale()) ) %}
+        <div class="row">
+            <div class="col-3">
+                <div class="d-inline-block" data-tooltip="true" data-placement="top"
+                     title="{{ 'tooltip.product.description_detail.lang_message'|trans }}">
+                    <span>{{ 'admin.product.description_detail.lang'|trans }}</span>
+                    <i class="fa fa-question-circle fa-lg ml-1"></i>
+                </div>
+            </div>
+            <div class="col">
+                {{ form_widget(form.product_content2, { attr : { rows : "8"} }) }}
+                {{ form_errors(form.product_content2) }}
+                <div class="d-inline-block mb-2" data-toggle="collapse" href="#addComment2"
+                     role="button" aria-expanded="false" aria-controls="addComment2">
+                    <a>
+                        <i class="fa fa-plus-square-o font-weight-bold mr-1"></i>
+                        <span class="font-weight-bold text-ec-black">
+                        {{ 'admin.product.description_list__add.lang'|trans }}
+                    </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="collapse ec-collapse" id="addComment2">
+            <div class="row bg-ec-formGray pt-3 mb-2">
+                <div class="col-3">
+                    <div class="d-inline-block" data-tooltip="true" data-placement="top"
+                         title="{{ 'tooltip.product.description_list.lang_message'|trans }}">
+                        <span>{{ 'admin.product.description_list.lang_title'|trans }}</span>
+                        <i class="fa fa-question-circle fa-lg ml-1"></i>
+                    </div>
+                </div>
+                <div class="col mb-4">
+                    <div>
+                        {{ form_widget(form.product_content3, { attr : { rows : "4"} }) }}
+                        {{ form_errors(form.product_content3) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{# 言語別商品説明フォーム終了 #}
+{#言語別free_areaフォーム#}
+<div id="product_free_area_lang_form">
+    {% if(eccube_config.locale is not same as(getCurrentLocale()) ) %}
+        <div class="row cross_border1_plg_form cross_border1_plg_free_area_margin">
+            <div class="col-3" data-tooltip="true" data-placement="top"
+                 title="{{ 'tooltip.product.free_area.lang_message'|trans }}">
+                <span class="card-title">{{ '言語別フリーエリア'|trans }}</span>
+                <i class="fa fa-question-circle fa-lg ml-1"></i>
+            </div>
+            <div class="col-9">
+                <div>
+                    {{ form_widget(form.product_content4, {attr : { rows : "8"} }) }}
+                    {{ form_errors(form.product_content4) }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{#言語別free_areaフォーム終わり#}

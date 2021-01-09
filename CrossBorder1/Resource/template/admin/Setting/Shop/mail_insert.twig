@@ -1,0 +1,19 @@
+<script>
+    $(function(){
+        var elem = $('span:contains("件名")').parent().parent();
+        elem.eq(0).after($('#mail_lang_form_area'));
+    });
+</script>
+{% if(eccube_config.locale is not same as(getCurrentLocale())) %}
+    <div class="row mb-2" id="mail_lang_form_area">
+        <div class="col-2">
+            <div class="d-inline-block" data-tooltip="true" data-placement="top" title="{{ 'cross_border1.tooltip.setting.shop.mail.mail_subject.lang_message'|trans }}">
+                <span>{{ 'cross_border1.admin.setting.shop.mail.mail_subject.lang_title'|trans }}</span><i class="fa fa-question-circle fa-lg ml-1"></i>
+            </div>
+        </div>
+        <div class="col-10">
+            {{ form_widget(form.mail_content) }}
+            {{ form_errors(form.mail_content) }}
+        </div>
+    </div>
+{% endif %}

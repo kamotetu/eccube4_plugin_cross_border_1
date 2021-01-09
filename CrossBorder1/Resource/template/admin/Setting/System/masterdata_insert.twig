@@ -1,0 +1,49 @@
+<script>
+    $(function(){
+        $('thead > tr').append($('#masterdata_lang_form_thead_tr').html());
+        var insert_ids = [];
+        var insert_elem = $('tr[id^="masterdata_lang_form_tbody_tr"]');
+        for(var i = 0;insert_elem.length > i;++i){
+            var insert_elem_id = insert_elem[i].id.replace(/masterdata_lang_form_tbody_tr(\d+)/g, '$1');
+            var insert_html = $('#masterdata_lang_form_tbody_tr' + insert_elem_id).html();
+            insert_ids.push(insert_elem_id);
+            $('#admin_system_masterdata_edit_data_' + insert_elem_id + '_name').parent().after(insert_html);
+        }
+        var elem = $('input[id^="admin_system_masterdata_edit_data_"]');
+        for(var i = 0;elem.length > i;++i){
+            if(elem[i].id.match(/admin_system_masterdata_edit_data_\d+_name/g)){
+                var elem_id = elem[i].id.replace(/admin_system_masterdata_edit_data_(\d+)_name/g, '$1');
+                if(insert_ids.includes(elem_id)){
+                    continue;
+                }else{
+                    var last_insert_elem = $('#masterdata_lang_form_tbody_tr').html();
+                    $('#admin_system_masterdata_edit_data_' + elem_id + '_name').parent().after(last_insert_elem);
+                }
+            }
+        }
+        $('#masterdata_lang_form_insert_table').remove();
+    });
+</script>
+<table id="masterdata_lang_form_insert_table">
+    <thead>
+    {% if(eccube_config.locale is not same as(getCurrentLocale())) %}
+        <tr id="masterdata_lang_form_thead_tr">
+            <th class="border-top-0 pt-2 pb-2 text-center">
+                {{ 'admin.setting.system.master_data.lang'|trans }}
+            </th>
+        </tr>
+    {% endif %}
+    </thead>
+    <tbody>
+    {% for data in form2.data %}
+        {% if(eccube_config.locale is not same as(getCurrentLocale())) %}
+            <tr id="masterdata_lang_form_tbody_tr{{ data.id.vars.value }}">
+                <td class="align-middle text-center">
+                    {{ form_widget(data.masterdata_content) }}
+                    {{ form_errors(data.masterdata_content) }}
+                </td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+    </tbody>
+</table>

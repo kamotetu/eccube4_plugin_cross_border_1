@@ -1,0 +1,33 @@
+<script>
+    $(function(){
+        $('form[name="form1"] > div').eq(1).removeClass('col-3 mr-2');
+        $('form[name="form1"] > div').eq(1).addClass('col-2');
+        $('form[name="form1"] > div').eq(3).removeClass('col-3');
+        $('form[name="form1"] > div').eq(3).addClass('col-2');
+        $('form[name="form1"] > div').eq(1).after($('#class_category_lang_new_form_title'));
+        $('form[name="form1"] > div').eq(2).after($('#class_category_lang_new_form'));
+        var insert_elem = $('div[id^="class_category_lang_edit_form"]');
+        for(var i = 0;insert_elem.length > i;++i){
+            var insert_elem_id = insert_elem[i].id.replace(/class_category_lang_edit_form(\d+)/g, '$1');
+            var insert_html = $('#class_category_lang_edit_form' + insert_elem_id);
+            $('#class_category_' + insert_elem_id + '_name').parent().after(insert_html);
+        }
+    });
+</script>
+{% if(eccube_config.locale is not same as(getCurrentLocale()) ) %}
+    <div class="col-auto align-self-center" id="class_category_lang_new_form_title" data-tooltip="true" data-placement="top" title="{{ 'tooltip.product.class_category.lang_message'|trans }}">
+        <span>{{ 'admin.product.class_category.lang_title'|trans }}</span>
+        <i class="fa fa-question-circle fa-lg ml-1"></i>
+    </div>
+    <div class="col-2 mr-2" id="class_category_lang_new_form">
+        {{ form_widget(form.class_category_content) }}
+        {{ form_errors(form.class_category_content) }}
+    </div>
+
+    {% for ClassCategory in ClassCategories %}
+        <div class="col-3 mr-2" id="class_category_lang_edit_form{{ ClassCategory.id }}">
+            {{ form_widget(forms[ClassCategory.id].class_category_content) }}
+            {{ form_errors(forms[ClassCategory.id].class_category_content) }}
+        </div>
+    {% endfor %}
+{% endif %}

@@ -1,0 +1,42 @@
+<script>
+    $(function(){
+        $('form[name="form1"] > div').prepend($('#category_name_title'));
+        $('form[name="form1"] > div > div').eq(1).after($('#category_lang_form_new_area'));
+        $('form[name="form1"] > div > div').eq(2).after($('#category_lang_new_form'));
+        var insert_elem = $('div[id^="category_lang_edit_form"]');
+        for(var i = 0;insert_elem.length > i;++i){
+            var insert_elem_id = insert_elem[i].id.replace(/category_lang_edit_form(\d+)/g, '$1');
+            var insert_html = $('#category_lang_edit_form' + insert_elem_id);
+            $('#category_' + insert_elem_id + '_name').parent().after(insert_html);
+        }
+    });
+</script>
+
+<div class="col-auto align-self-center" id="category_name_title">
+    <span class="card-title">{{ 'カテゴリ'|trans }}</span>
+</div>
+
+{% if(eccube_config.locale is not same as(getCurrentLocale()) ) %}
+    <div class="col-auto align-self-center" id="category_lang_form_new_area">
+        <div class="col-auto" data-tooltip="true" data-placement="top"
+             title="{{ 'tooltip.product.category.lang_message'|trans }}">
+            <span class="card-title">{{ '言語別カテゴリ'|trans }}</span>
+            <i class="fa fa-question-circle fa-lg ml-1"></i>
+        </div>
+    </div>
+
+    <div class="col-auto" id="category_lang_new_form">
+        {{ form_widget(form.category_content) }}
+        {{ form_errors(form.category_content) }}
+    </div>
+{% endif %}
+
+{% for Category in Categories %}
+    {% if(eccube_config.locale is not same as(getCurrentLocale()) ) %}
+            <div class="col-auto align-items-center" id="category_lang_edit_form{{ Category.id }}">
+                {{ form_widget(forms[Category.id].category_content) }}
+                {{ form_errors(forms[Category.id].category_content) }}
+            </div>
+    {% endif %}
+{% endfor %}
+

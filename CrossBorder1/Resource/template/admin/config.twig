@@ -1,0 +1,468 @@
+{% extends '@admin/default_frame.twig' %}
+
+{% set menus = ['store', 'plugin', 'plugin_list'] %}
+
+{% block title %}CrossBorder1{% endblock %}
+{% block sub_title %}プラグイン一覧{% endblock %}
+
+{% form_theme form '@admin/Form/bootstrap_4_horizontal_layout.html.twig' %}
+
+{% block stylesheet %}
+    <style>
+        .lang-item {
+            padding: 0;
+        }
+        .c-primaryCol {
+            padding-bottom: 10vh;
+        }
+
+        table {
+            width: 30%;
+            table-layout: fixed;
+            border-color: rgba(0, 0, 0, 0.125);
+            background-color: white;
+        }
+        th {
+            padding-left: 10px;
+        }
+        td {
+            padding-left: 10px;
+        }
+    </style>
+{% endblock stylesheet %}
+
+{% block javascript %}
+    <script src="{{ asset('assets/js/vendor/jquery.ui/jquery.ui.core.min.js', 'admin') }}"></script>
+    <script src="{{ asset('assets/js/vendor/jquery.ui/jquery.ui.widget.min.js', 'admin') }}"></script>
+    <script src="{{ asset('assets/js/vendor/jquery.ui/jquery.ui.mouse.min.js', 'admin') }}"></script>
+    <script src="{{ asset('assets/js/vendor/jquery.ui/jquery.ui.sortable.min.js', 'admin') }}"></script>
+<script>
+// 降順にソートする
+    $(function() {
+        var $items_wrapper = $('.sortable-container');
+        var $items = $('.sortable-item');
+        $items.sort(function(a, b) {
+            return parseInt($(a).find('.sort-no').val()) > parseInt($(b).find('.sort-no').val());
+        });
+        $items.each(function() {
+            $items_wrapper.append($(this).remove());
+        });
+    });
+
+    // 並び替え後にsort noを更新
+    function updateSortNo() {
+        var $items = $('.sortable-container').find('.sortable-item');
+        $items.each(function() {
+            $(this).find('.sort-no').val($items.index(this) + 1);
+        });
+    }
+
+    // 最初と最後の↑↓を再描画
+    function redrawDisableAllows() {
+        var items = $('.sortable-item');
+        items.find('a').removeClass('disabled');
+        items.first().find('a.action-up').addClass('disabled');
+        items.last().find('a.action-down').addClass('disabled');
+    }
+
+    // 表示順の更新を行う
+    function moveSortNo() {
+        updateSortNo();
+        redrawDisableAllows();
+    }
+
+    $(function(){
+        var $collectionHolder = $('#lang-group');
+        var lis = $('input[id^="config_names_"]');
+        var lis_box = [];
+        for(var i = 0;lis.length > i;++i){
+            if(lis[i].id.match(/config_names_\d_name/g)){
+                lis_box.push(lis[i]);
+            }
+        }
+        var ids = [];
+        for(var i = 0;lis_box.length > i;++i){
+            var li_id = lis_box[i].id.replace(/config_names_(\d)_name/g, '$1');
+            ids.push(li_id);
+        }
+
+        var index = Math.max.apply(null, ids) + 1;
+
+        redrawDisableAllows();
+
+        $('#add-lang-button').on('click', function(event){
+            var new_backend_name = $('#config_lang_backend_name').val();
+            var new_lang = $('#config_lang_name').val();
+            if(new_lang === '' || new_backend_name === ''){
+                return;
+            }
+            var config_name_content = $('#config_lang_config_name_content').val();
+            var prototype = $collectionHolder.data('prototype');
+
+            var newForm = prototype.replace(/__name__/g, index);
+            var $lastRow = $('#lang-group > li:last');
+            $lastRow.after(newForm);
+            var target_name_elem = '#config_names_' + index + '_name';
+            $(target_name_elem).val(new_lang);
+            $(target_name_elem).attr('data-origin-value', new_lang);
+            var target_backend_name_elem = '#config_names_' + index + '_backend_name';
+            $(target_backend_name_elem).val(new_backend_name);
+            $(target_backend_name_elem).attr('data-origin-value', new_backend_name);
+            var target_visible = '#config_names_' + index + '_visible';
+            $(target_visible).val(0);
+            $(target_visible).parent('div').find('.action-visible i').removeClass('fa-toggle-on');
+            $(target_visible).parent('div').find('.action-visible i').addClass('fa-toggle-off');
+            var target_config_name_content_elem = '#config_names_' + index + '_config_name_content';
+            $(target_config_name_content_elem).val(config_name_content);
+            $(target_config_name_content_elem).attr('data-origin-value', config_name_content);
+            $('#config_lang_name').val('');
+            $('#config_lang_backend_name').val('');
+            $('#config_lang_config_name_content').val('');
+
+            ++index;
+
+            moveSortNo();
+        });
+
+        // Up
+        $('#lang-group').on('click', 'a.action-up', function(e) {
+            e.preventDefault();
+            var current = $(this).parents('li');
+            if (current.prev().hasClass('sortable-item')) {
+                current.prev().before(current);
+                moveSortNo();
+            }
+        });
+
+        // Drag and Drop
+        $('.sortable-container').sortable({
+            items: '> .sortable-item',
+            cursor: 'move',
+            update: function(e, ui) {
+                moveSortNo();
+            }
+        });
+
+        // Down
+        $('#lang-group').on('click', 'a.action-down', function(e) {
+            e.preventDefault();
+            var current = $(this).parents('li');
+            if (current.next().hasClass('sortable-item')) {
+                current.next().after(current);
+                moveSortNo();
+            }
+        });
+
+        // 表示・非表示の切り替え
+        $('#lang-group').on('click', 'a.action-visible', function(e) {
+            e.preventDefault();
+
+            var $this = $(this);
+            var $i = $this.find('i');
+
+            if ($i.hasClass('fa-toggle-on')) {
+                $i.addClass('fa-toggle-off');
+                $i.removeClass('fa-toggle-on');
+                $this.attr('data-original-title', '{{ 'admin.common.to_show'|trans }}');
+                $this.parents('li').find('.visible').val('0');
+            } else {
+                $i.addClass('fa-toggle-on');
+                $i.removeClass('fa-toggle-off');
+                $this.attr('data-original-title', '{{ 'admin.common.to_hide'|trans }}');
+                $this.parents('li').find('.visible').val('1');
+            }
+            // ツールチップの表示を更新
+            $this.tooltip('show');
+        });
+
+        $('#lang-group').on('click', '.remove-lang-item', function(event){
+            event.preventDefault();
+            $(this).tooltip('hide');
+            $(event.target).parents('li').remove();
+            moveSortNo();
+        });
+
+        // 編集時, エラーがあれば入力欄を表示.
+        $('#lang-group').find('.is-invalid').each(function(e) {
+            var current = $(this).parents('li');
+            current.find('.mode-view').addClass('d-none');
+            current.find('.mode-edit').removeClass('d-none');
+        });
+    });
+
+    $(function(){
+        $('.action-delete').on('click', function(e){
+            var target_file = $('.uploaded_files_form').val();
+            if(!confirm('本当に' + target_file + 'を削除してよろしいですか？\n※ファイルは完全に削除されます。')){
+                return false;
+            }
+        });
+    });
+
+
+</script>
+{% endblock javascript %}
+
+{% block main %}
+    <form role="form" method="post" enctype="multipart/form-data">
+        {{ form_widget(form2._token) }}
+        <div class="c-contentsArea__cols">
+            <div class="c-contentsArea__primaryCol">
+                <div class="c-primaryCol">
+                    <div class="card rounded border-0 mb-4">
+                        <div class="card-header"><span class="card-title">{{ 'admin.content.cross_border1.guide'|trans }}</span></div>
+                        <div class="card-body row m-0">
+                            <div id="cross_border_guide" class="col-auto d-flex align-items-center">
+                                <a class="btn btn-ec-regular" href="{{ url('cross_border1_admin_config_guide')}}" target="_blank">クリック</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card rounded border-0 mb-4">
+                        <div class="card-header">
+                            <span class="card-title">{{ 'admin.content.cross_border1.default_file.upload_download_file.upload.download.title'|trans }}</span>
+                        </div>
+                        <div class="card-body row m-0">
+                            <div id="upload_box__file" class="row col-6 mb-2">
+                                <div class="row mb-2">
+                                    <div class="col-6" data-tooltip="true" data-placement="top" title="{{ 'tooltip.content.cross_border1.default_file.upload_download_file'|trans }}">
+                                        <span>{{ 'admin.content.cross_border1.default_file.title'|trans }}</span>
+                                        <i class="fa fa-question-circle fa-lg ml-1"></i>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="mb-4">
+                                            {{ form_widget(form2.file) }}
+                                            {{ form_errors(form2.file) }}
+                                        </div>
+                                        <div class="mb-2">
+                                            <button type="submit" name="mode" value="upload" class="btn btn-ec-conversion action-upload ladda-button">
+                                                {{ 'admin.common.upload'|trans }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="download_file" class="row col-6 mb-2">
+                                <div class="col ml-2">
+                                    <div class="mb-3">
+                                        {{ form_widget(form2.uploaded_files, {'attr': {'class': 'uploaded_files_form'}}) }}
+                                        {{ form_errors(form2.uploaded_files) }}
+                                    </div>
+                                    <div class="mb-2">
+                                        <button type="submit" name="mode" value="download" class="btn btn-ec-conversion action-download ladda-button">
+                                            {{ 'admin.common.download'|trans }}
+                                        </button>
+                                        <button type="submit" name="mode" value="delete" class="btn btn-ec-conversion action-delete ladda-button ml-3">
+                                            {{ 'admin.common.delete'|trans }}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body row m-0">
+                            <span class="text-danger">{{ 'admin.content.cross_border1.upload_download.message'|trans }}</span>
+                        </div>
+                    </div>
+
+                    <div class="card-header">
+                        <span>設定</span>
+                    </div>
+                    <ul id="lang-group" class="sortable-container" data-prototype="{% filter escape %}{{ include('@CrossBorder1/admin/config_prototype.twig', {'form': form2.names.vars.prototype}) }}{% endfilter %}">
+                        <li>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-1 d-flex align-items-center"><span>名称</span></div>
+                                    <div class="col d-flex align-items-center">
+                                        {{ form_widget(form.name) }}
+                                        {{ form_errors(form.name) }}
+                                    </div>
+                                    {% if(eccube_config.locale is not same as(getCurrentLocale()) ) %}
+                                        <div class="col-1 d-flex align-items-center"><span>言語別名称</span></div>
+                                        <div class="col d-flex align-items-center">
+                                            {{ form_widget(form.config_name_content) }}
+                                            {{ form_errors(form.config_name_content) }}
+                                        </div>
+                                    {% endif %}
+                                    <div class="col-1 d-flex align-items-center"><span>言語コード</span></div>
+                                    <div class="col d-flex align-items-center">
+                                        {{ form_widget(form.backend_name) }}
+                                        {{ form_errors(form.backend_name) }}
+                                    </div>
+                                    <div class="col-auto d-flex align-items-center">
+                                        <button id="add-lang-button" class="btn btn-ec-regular" type="button">{{ 'admin.common.create__new'|trans }}</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="d-inline-block mb-2" data-toggle="collapse" href="#addComment"
+                                     role="button" aria-expanded="false" aria-controls="addComment">
+                                    <a>
+                                        <i class="fa fa-plus-square-o font-weight-bold mr-1"></i>
+                                        <span class="font-weight-bold text-ec-black">言語コードリスト</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="collapse ec-collapse" id="addComment">
+                                <div class="row bg-ec-formGray pt-3 mb-2">
+                                    <div class="col mb-4 table_area">
+                                        <table border="1">
+                                            <thead>
+                                                <th class="table_th">
+                                                    言語
+                                                </th>
+                                                <th>
+                                                    言語コード
+                                                </th>
+                                            </thead>
+                                            <tbody>
+                                                <td>
+                                                    日本語
+                                                </td>
+                                                <td>
+                                                    ja
+                                                </td>
+                                            </tbody>
+                                            <tbody>
+                                            <td>
+                                                英語
+                                            </td>
+                                            <td>
+                                                en
+                                            </td>
+                                            </tbody>
+                                            <tbody>
+                                            <td>
+                                                中国語
+                                            </td>
+                                            <td>
+                                                zh
+                                            </td>
+                                            </tbody>
+                                            <tbody>
+                                            <td>
+                                                韓国語
+                                            </td>
+                                            <td>
+                                                ko
+                                            </td>
+                                            </tbody>
+                                            <tbody>
+                                            <td>
+                                                ロシア語
+                                            </td>
+                                            <td>
+                                                ru
+                                            </td>
+                                            </tbody>
+                                            <tbody>
+                                            <td>
+                                                イタリア語
+                                            </td>
+                                            <td>
+                                                it
+                                            </td>
+                                            </tbody>
+                                            <tbody>
+                                            <td>
+                                                スペイン語
+                                            </td>
+                                            <td>
+                                                es
+                                            </td>
+                                            </tbody>
+                                            <tbody>
+                                            <td>
+                                                フランス語
+                                            </td>
+                                            <td>
+                                                fr
+                                            </td>
+                                            </tbody>
+                                            <tbody>
+                                            <td>
+                                                ドイツ語
+                                            </td>
+                                            <td>
+                                                de
+                                            </td>
+                                            </tbody>
+                                            <tbody>
+                                            <td>
+                                                ラテン語
+                                            </td>
+                                            <td>
+                                                la
+                                            </td>
+                                            </tbody>
+                                            <tbody>
+                                            <td>
+                                                ギリシャ語
+                                            </td>
+                                            <td>
+                                                el
+                                            </td>
+                                            </tbody>
+                                            <tbody>
+                                            <td>
+                                                マレー語
+                                            </td>
+                                            <td>
+                                                ms
+                                            </td>
+                                            </tbody>
+                                            <tbody>
+                                            <td>
+                                                アラビア語
+                                            </td>
+                                            <td>
+                                                ar
+                                            </td>
+                                            </tbody>
+                                            <tbody>
+                                            <td>
+                                                エスペラント語
+                                            </td>
+                                            <td>
+                                                eo
+                                            </td>
+                                            </tbody>
+                                        </table>
+                                        <span class="text-danger">※こちらに記載のない言語コードはご自身でお調べになってください。</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        {% for child in form2.names %}
+                            {{ include('@CrossBorder1/admin/config_prototype.twig', {'form': child}) }}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="c-conversionArea">
+            <div class="c-conversionArea__container">
+                <div class="row justify-content-between align-items-center">
+                    <div class="col-6">
+                        <div class="c-conversionArea__leftBlockItem">
+                            <a class="c-baseLink"
+                               href="{{ url('admin_store_plugin') }}">
+                                <i class="fa fa-backward" aria-hidden="true"></i>
+                                <span>プラグイン一覧</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="row align-items-center justify-content-end">
+                            <div class="col-auto">
+                                <button class="btn btn-ec-conversion px-5" type="submit" id="lang_register_btn" name="mode" value="register">
+                                    登録
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

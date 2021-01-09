@@ -1,0 +1,44 @@
+<style type="text/css">
+    .select_language_area {
+        display: table-cell;
+        width: 150px;
+        text-align: center;
+        font-size: 14px;
+        margin-left: 3px;
+    }
+    select[name="lang"] {
+        height: 30px;
+        font-size: 13px;
+    }
+</style>
+
+<script>
+    $(function () {
+        $('div.ec-headerNaviRole').append($('#lang_form_area'));
+    });
+    //ChangeLangType内で呼び出し
+    function get_language_value(){
+        let obj = document.getElementById('lang');
+        let index = obj.selectedIndex;
+        if(index >= 0){
+            let url = location.href;
+            document.language_change.action = String(url);
+            document.language_change.submit();
+        }
+    }
+</script>
+<div id="lang_form_area">
+    {% if 'shopping' not in app.request.uri %}
+        <div class="select_language_area">
+            {% set nav_message = 'config.cross_border1.select.language.nav'|trans %}
+            {% if(nav_message is not same as('config.cross_border1.select.language.nav') and nav_message is not same as('')) %}
+                {{ 'config.cross_border1.select.language.nav'|trans }}
+            {% endif %}
+            {% if(lang_form.lang.vars.choices is not empty) %}
+                <form action="" name="language_change">
+                    {{ form_widget(lang_form.lang) }}
+                </form>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>

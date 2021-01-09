@@ -1,0 +1,12 @@
+{
+  "name": "ec-cube/CrossBorder1",
+  "version": "1.0.0",
+  "description": "CrossBorder1",
+  "type": "eccube-plugin",
+  "require": {
+    "ec-cube/plugin-installer": "~0.0.7"
+  },
+  "extra": {
+    "code": "CrossBorder1"
+  }
+}

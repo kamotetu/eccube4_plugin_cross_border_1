@@ -1,0 +1,9 @@
+services:
+  Plugin\CrossBorder1\Event\SendMailListener:
+    public: false
+    autowire: true
+    arguments:
+      - "@logger"
+    tags:
+      - { name: monolog.logger, channel: mailer }
+      - { name: "swiftmailer.default.plugin" }

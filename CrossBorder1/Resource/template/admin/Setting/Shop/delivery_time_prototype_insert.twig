@@ -1,0 +1,38 @@
+<script>
+    $(function(){
+        var insert_elem = $('div[id^="delivery_time_delivery_time_edit_lang_form"]');
+        if(insert_elem.length > 0){
+            for(var i = 0;insert_elem.length > i;++i){
+                var insert_elem_id = insert_elem[i].id.replace(/delivery_time_delivery_time_edit_lang_form(\d+)/g, '$1');
+                $('#delivery_delivery_times_' + insert_elem_id + '_delivery_time').parent().eq(0).after($('#delivery_time_delivery_time_edit_lang_form' + insert_elem_id));
+            }
+        }
+
+        $('#add-delivery-time-button').on('click', function(event){
+
+            var input_lang_value = $('#add-delivery-time-value-lang').val();
+
+            var last_li_elem = $('ul#delivery-time-group > li:last').find('input[type="text"]');
+
+            var last_li_input_id_tag = last_li_elem[0].id;
+            var last_li_input_id = last_li_input_id_tag.replace(/delivery_delivery_times_(\d+)_delivery_time/g, '$1');
+            var insert_html =
+                '<div class="col-auto d-flex align-items-center" id="delivery_time_delivery_time_edit_lang_form' + last_li_input_id + '">' +
+                '<input type="text" id="delivery_delivery_times_' + last_li_input_id + '_delivery_time_content"' +
+                ' name="delivery[delivery_times][' + last_li_input_id + '][delivery_time_content]"' +
+                'style="border-color:#638dff" class="form-control" value="' + input_lang_value + '"></div>';
+            last_li_elem.after(insert_html);
+            $('#add-delivery-time-value-lang').val('');
+        });
+    });
+</script>
+{% if(eccube_config.locale is not same as(getCurrentLocale()) ) %}
+
+    {% for key, child_form in form.delivery_times %}
+        <div class="col-auto d-flex align-items-center" id="delivery_time_delivery_time_edit_lang_form{{ key }}">
+            {{ form_widget(child_form.delivery_time_content) }}
+        </div>
+    {% endfor %}
+
+{% endif %}
+

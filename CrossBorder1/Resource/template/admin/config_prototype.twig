@@ -1,0 +1,51 @@
+{% set Config = form.vars.value %}
+<li class="list-group-item lang-item sortable-item">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-auto d-flex align-items-center"><i class="fa fa-bars text-ec-gray"></i></div>
+            <div class="col d-flex align-items-center">
+                {{ form_widget(form.name) }}
+                {{ form_errors(form.name) }}
+            </div>
+
+            {% if(eccube_config.locale is not same as(getCurrentLocale()) ) %}
+                <div class="col d-flex align-items-center">
+                    {{ form_widget(form.config_name_content) }}
+                    {{ form_errors(form.config_name_content) }}
+                </div>
+            {% endif %}
+
+            <div class="col d-flex align-items-center">
+                {{ form_widget(form.backend_name) }}
+                {{ form_errors(form.backend_name) }}
+            </div>
+            {{ form_widget(form.sort_no, {'attr': {'class': "sort-no" }}) }}
+            {{ form_widget(form.visible, {'attr':{'class': "visible"}}) }}
+            <div class="col-auto text-right">
+                <a class="btn btn-ec-actionIcon mr-2 action-up" href="" data-tooltip="true"
+                   data-placement="top" title="{{ 'admin.common.up'|trans }}">
+                    <i class="fa fa-arrow-up fa-lg text-secondary"></i>
+                </a>
+                <a class="btn btn-ec-actionIcon mr-2 action-down" href="" data-tooltip="true"
+                   data-placement="top" title="{{ 'admin.common.down'|trans }}">
+                    <i class="fa fa-arrow-down fa-lg text-secondary"></i>
+                </a>
+                {% if Config is empty %}
+                    <a class="btn btn-ec-actionIcon mr-2 action-visible" href="" data-tooltip="true"
+                       data-placement="top" title="{{ 'admin.common.to_hide'|trans }}">
+                        <i class="fa fa-toggle-on fa-lg text-secondary" aria-hidden="true"></i>
+                    </a>
+                {% else %}
+                    <a class="btn btn-ec-actionIcon mr-2 action-visible" href="" data-tooltip="true"
+                       data-placement="top" title="{{ Config.visible ? 'admin.common.to_hide'|trans : 'admin.common.to_show'|trans }}">
+                        <i class="fa fa-toggle-{{ Config.visible ? 'on' : 'off' }} fa-lg text-secondary" aria-hidden="true"></i>
+                    </a>
+                {% endif %}
+                <a class="btn btn-ec-actionIcon mr-2 remove-lang-item" href="" data-tooltip="true"
+                   data-placement="top" title="{{ 'admin.common.delete'|trans }}">
+                    <i class="fa fa-close fa-lg text-secondary"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</li>

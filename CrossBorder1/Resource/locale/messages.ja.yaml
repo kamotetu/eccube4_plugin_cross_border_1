@@ -1,0 +1,63 @@
+#------------------------------------------------------------------------------------
+# 管理画面
+#------------------------------------------------------------------------------------
+## プラグイン設定画面
+admin.content.cross_border1.default_file.upload_download_file.upload.download.title: messages.◯◯.yamlファイル
+tooltip.content.cross_border1.default_file.upload_download_file: ECCUBE本体で設定されている言語ファイルのアップロード、ダウンロードを行います。
+admin.content.cross_border1.default_file.title: ファイルアップロード、ダウンロード
+tooltip.content.cross_border1.plugin_file.upload_download_file:
+  プラグインで設定されている言語ファイルのアップロード、ダウンロードを行います。
+  主に言語切り替えのラベルの表示を変更したい場合に使用してください。
+admin.content.cross_border1.plugin_file.title: プラグインファイル
+admin.content.cross_border1.upload_download.message:
+  ※既に存在するファイルをアップロードすると元のファイルは上書きされます。
+  現在適用しているyamlファイルをダウンロードし、バックアップを取っておくことをおすすめします。
+admin.content.cross_border1.guide: 使用ガイド
+## 商品登録画面
+tooltip.product.description_detail.lang_message: 選択言語に応じて表サイトに表示される商品説明です
+admin.product.description_detail.lang: 言語別商品説明
+tooltip.product.name.lang_message: 選択言語に応じて表サイトに表示される商品名です
+admin.product.description_list__add.lang: 言語別商品説明(一覧)を追加
+admin.product.description_list.lang_title: 言語別商品説明(一覧)
+tooltip.product.description_list.lang_message: 選択言語に応じて表サイトに表示される商品説明(一覧)です
+tooltip.product.free_area.lang_message: 選択言語に応じてフリーエリアを設定します
+## マスタデータ管理画面
+admin.setting.system.master_data.lang: Front Side Name
+## 規格管理画面
+tooltip.product.class_name.lang_message: 選択言語に応じて規格名を設定します。
+admin.product.class_category.lang_title: 言語別分類名
+tooltip.product.class_category.lang_message: 選択言語に応じて分類名を設定します。
+## カテゴリ管理
+tooltip.product.category.lang_message: 選択言語に応じてカテゴリを設定します。
+## 商品CSV登録
+admin.product.product_csv.product_name_description_lang: 選択言語に合わせた商品名を設定します。
+admin.product.product_csv.description_detail_description_lang: 選択言語に合わせた商品説明(詳細)を設定します。
+admin.product.product_csv.description_list_description_lang: 選択言語に合わせた商品説明(一覧)を設定します。
+admin.product.product_csv.free_area_description_lang: 選択言語に合わせたフリーエリアを設定します。
+## カテゴリCSV登録
+admin.product.category_csv.category_name_description_lang: 選択言語に合わせたカテゴリ名を設定します。
+## 新着情報管理
+admin.content.news.title_lang: 言語別タイトル
+admin.content.news.body_lang: 言語別本文
+tooltip.content.news.title_lang: 選択言語に合わせたカテゴリ名を設定します。
+tooltip.content.news.body_lang: 選択言語に合わせたカテゴリ名を設定します。
+## 基本設定
+tooltip.setting.shop.shop.company_name.lang_message: 選択言語に応じた会社名を設定します。
+admin.setting.shop.shop.company_name.lang_title: 言語別会社名
+tooltip.setting.shop.shop.shop_name.lang_message: 選択言語に応じた店名を設定します。
+admin.setting.shop.shop.shop_name.lang_title: 言語別店名
+tooltip.setting.shop.shop.good_traded.lang_message: 選択言語に応じた取り扱い商品説明文を設定します。
+admin.setting.shop.shop.good_traded.lang_title: 言語別取り扱い商品説明文
+tooltip.setting.shop.shop.message.lang_message: 選択言語に応じた店舗からのメッセージを設定します。
+admin.setting.shop.shop.message.lang_title: 言語別店舗からのメッセージ
+## 支払方法設定
+tooltip.setting.shop.payment.payment_name.lang_message: 選択言語に応じた支払方法名を設定します。
+admin.setting.shop.payment.payment_name.lang_title: 言語別支払方法名
+## 配送方法設定
+tooltip.setting.shop.delivery.delivery_name.lang_message: 選択言語に応じた配送業者名を指定します。
+admin.setting.shop.delivery.delivery_name.lang_title: 言語別配送業者名
+tooltip.setting.shop.delivery.delivery_time.lang_message: 選択言語に応じたお届け時間を設定します。
+admin.setting.shop.delivery.delivery_time.lang_title: 言語別お届け時間
+## メール設定画面
+cross_border1.tooltip.setting.shop.mail.mail_subject.lang_message: 選択言語に応じた件名を設定します。
+cross_border1.admin.setting.shop.mail.mail_subject.lang_title: 言語別件名

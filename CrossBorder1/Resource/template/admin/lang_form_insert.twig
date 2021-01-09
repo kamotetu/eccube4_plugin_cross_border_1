@@ -1,0 +1,35 @@
+<script>
+    $(function(){
+        $('.c-headerBar__shopTitle').after($('.select_language_area'));
+    });
+    function get_language_value(){
+        let obj = document.getElementById('lang');
+        let index = obj.selectedIndex;
+        if(index >= 0){
+            let url = location.href;
+            document.language_change.action = String(url);
+            document.language_change.submit();
+        }
+    }
+</script>
+<style>
+    .select_language_area {
+        display: table-cell;
+        padding: 0 20px;
+        height: 65px;
+        font-size: 14px;
+        color: #fff;
+        vertical-align: middle;
+        text-align: center;
+        width: 220px;
+    }
+</style>
+<div class="select_language_area">
+    {% set nav_message = 'config.cross_border1.select.language.nav'|trans %}
+    {% if(nav_message is not same as('config.cross_border1.select.language.nav') and nav_message is not same as('')) %}
+        {{ 'config.cross_border1.select.language.nav'|trans }}
+    {% endif %}
+    <form action="" name="language_change" class="language_change">
+        {{ form_widget(lang_form.lang) }}
+    </form>
+</div>

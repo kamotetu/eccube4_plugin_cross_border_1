@@ -1,0 +1,41 @@
+<script>
+    $(function () {
+        $('div#newsForm > div > div').eq(1).after($('#content1_area'));
+        $('div#newsForm > div > div').eq(5).after($('#content2_area'));
+    });
+</script>
+
+<div id="content1_area">
+    {% if(eccube_config.locale is not same as(getCurrentLocale()) ) %}
+        <div class="row">
+            <div class="col-3">
+                <div class="d-inline-block" data-tooltip="true" data-placement="top" title="{{ 'tooltip.content.news.title_lang'|trans }}">
+                    <span>{{ 'admin.content.news.title_lang'|trans }}</span>
+                    <i class="fa fa-question-circle fa-lg ml-1"></i>
+                </div>
+            </div>
+            <div class="col mb-2">
+                {{ form_widget(form.news_content1) }}
+                {{ form_errors(form.news_content1) }}
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<div id="content2_area">
+    {% if(eccube_config.locale is not same as(getCurrentLocale()) ) %}
+        <div class="row">
+            <div class="col-3">
+                <div class="d-inline-block" data-tooltip="true" data-placement="top" title="{{ 'tooltip.content.news.body_lang'|trans }}">
+                    <span>{{ 'admin.content.news.body_lang'|trans }}</span>
+                    <i class="fa fa-question-circle fa-lg ml-1"></i>
+                </div>
+            </div>
+            <div class="col mb-2">
+                {{ form_widget(form.news_content2) }}
+                {{ form_errors(form.news_content2) }}
+            </div>
+        </div>
+    {% endif %}
+</div>
+
